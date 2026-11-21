@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Земля отчуждения – ПР1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=PT+Sans:wght@400;700&family=PT+Mono&display=swap" rel="stylesheet">
+<style>
+@page { size: 1280px 720px; margin: 0; }
+:root{
+  --bg:#0d0f0d; --panel:rgba(16,19,16,.82); --line:rgba(214,190,90,.22); --ink:#e6e2d3; --muted:#9c9a88;
+  --acc:#e0b62a; --rust:#b5651d; --red:#c4473a; --tox:#9bb03a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#050605;color:var(--ink);font-family:"PT Sans","Segoe UI",Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+h1,h2,h3,.disp{font-family:Oswald,"Arial Narrow",sans-serif;font-weight:600;letter-spacing:.01em;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+h1{text-shadow:0 2px 0 rgba(0,0,0,.55)}
+
+/* ---------- slide base ---------- */
+.slide{width:1280px;height:720px;padding:54px 72px 46px;position:relative;overflow:hidden;background:var(--bg)}
+.bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.bg img{width:100%;height:100%;object-fit:cover;filter:grayscale(.55) sepia(.35) contrast(1.15) brightness(.55) saturate(.9)}
+.bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,12,10,.96) 0%,rgba(10,12,10,.86) 45%,rgba(10,12,10,.55) 100%)}
+.bg.faint img{filter:grayscale(.7) sepia(.4) contrast(1.1) brightness(.4)}
+.bg.faint::after{background:linear-gradient(180deg,rgba(10,12,10,.86),rgba(10,12,10,.93))}
+.bg.right{left:auto;width:42%}
+.bg.right::after{background:linear-gradient(90deg,rgba(13,15,13,1) 0%,rgba(13,15,13,.35) 40%,rgba(13,15,13,.15) 100%)}
+.vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.65) 100%)}
+.content{position:relative;z-index:2;height:100%}
+.num{position:absolute;right:72px;bottom:24px;z-index:3;font:13px "PT Mono",monospace;color:var(--muted)}
+.credit{position:absolute;right:72px;top:22px;z-index:3;font:10.5px "PT Mono",monospace;color:rgba(230,226,211,.4)}
+.label{font:14px "PT Mono",monospace;color:var(--acc);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.label::before{content:"";width:22px;height:2px;background:var(--acc)}
+h1{font-size:42px;line-height:1.08;margin-bottom:24px;text-transform:uppercase;color:#f1ecd8}
+h3{font-size:18px;color:var(--acc);font-weight:500;margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em}
+p,li{font-size:16.5px;line-height:1.45}
+ul{padding-left:20px} li{margin-bottom:5px} li::marker{color:var(--acc)}
+.muted{color:var(--muted)}
+b{color:#fff;font-weight:700}
+.grid{display:grid;gap:22px}
+.g2{grid-template-columns:1fr 1fr} .g3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:18px 20px;position:relative}
+.card::before{content:"";position:absolute;left:-1px;top:-1px;width:14px;height:14px;border-left:2px solid var(--acc);border-top:2px solid var(--acc)}
+.tag{display:inline-block;font:12.5px "PT Mono",monospace;border:1px solid var(--acc);color:var(--acc);padding:2px 9px;margin:0 6px 6px 0}
+.tag.on{background:var(--acc);color:#111}
+table{border-collapse:collapse;width:100%;background:rgba(12,14,12,.85)}
+th,td{border:1px solid rgba(214,190,90,.18);padding:7px 9px;text-align:left;vertical-align:top;font-size:13px;line-height:1.35}
+th{background:rgba(224,182,42,.12);color:var(--acc);font-family:Oswald,sans-serif;font-weight:500;font-size:13.5px;letter-spacing:.02em}
+td.hl,th.hl{background:rgba(224,182,42,.09)}
+.hazard{position:absolute;left:0;right:0;height:10px;z-index:3;background:repeating-linear-gradient(-45deg,var(--acc) 0 14px,#111 14px 28px);opacity:.85}
+.hazard.top{top:0} .hazard.bot{bottom:0}
+
+.bg.reactor img{filter:grayscale(.5) sepia(.4) contrast(1.2) brightness(.72)}
+.bg.reactor::after{background:linear-gradient(180deg,rgba(10,12,10,.9) 0%,rgba(10,12,10,.55) 65%,rgba(10,12,10,.25) 100%)}
+.card p,.card li{text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+/* ---------- radiation sign ---------- */
+.rad{display:block}
+.rad-glow{filter:drop-shadow(0 0 18px rgba(224,182,42,.35))}
+
+/* ---------- title ---------- */
+.title .bg img{object-position:center 40%;filter:grayscale(.45) sepia(.45) contrast(1.2) brightness(.5)}
+.title .bg::after{background:linear-gradient(90deg,rgba(8,9,8,.97) 0%,rgba(8,9,8,.8) 42%,rgba(8,9,8,.25) 100%)}
+.title .content{display:flex;flex-direction:column;justify-content:center}
+.title h1{font-size:92px;line-height:.95;margin-bottom:18px;letter-spacing:.02em}
+.title .sub{font-size:21px;color:#cfc9b2;max-width:640px;line-height:1.4}
+.title .radwrap{position:absolute;right:20px;top:120px;width:380px;height:380px}
+.title .rad{width:380px;height:380px}
+.author{margin-top:48px;font-size:18px;line-height:1.6;border-left:3px solid var(--acc);padding-left:16px}
+.coords{font:13px "PT Mono",monospace;color:var(--muted);margin-top:22px}
+
+/* placeholders */
+.shot{border:2px dashed rgba(224,182,42,.45);display:flex;align-items:center;justify-content:center;color:var(--muted);font:13px "PT Mono",monospace;text-align:center;padding:10px;background:rgba(10,12,10,.75)}
+.route{display:flex;margin-top:6px}
+.route div{flex:1;border-top:2px dashed var(--acc);padding-top:9px;font-size:13px;line-height:1.3;position:relative}
+.route div:before{content:"";position:absolute;top:-7px;left:0;width:12px;height:12px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc)}
+.route span{display:block;color:var(--acc);font:600 14px "PT Mono",monospace}
+.bar{height:10px;background:rgba(255,255,255,.08);overflow:hidden;margin:6px 0 14px}
+.bar i{display:block;height:100%;background:repeating-linear-gradient(-45deg,var(--acc) 0 8px,#c99c18 8px 16px)}
+.risk::before{border-color:var(--red)}
+.risk h3{color:var(--red)}
+.big{font-family:Oswald,sans-serif;font-weight:400;font-size:27px;line-height:1.3}
+.photo{position:relative;overflow:hidden;border:1px solid var(--line)}
+.photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(.4) sepia(.35) contrast(1.1) brightness(.75);display:block}
+.photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:6px 10px;font:11px "PT Mono",monospace;color:#d8d2bb;background:linear-gradient(transparent,rgba(0,0,0,.85))}
+
+/* ---------- screen mode: animated deck ---------- */
+@media screen{
+  body{overflow:hidden;height:100vh;display:grid;place-items:center}
+  #deck{position:relative;width:1280px;height:720px;zoom:var(--s,1)}
+  .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .9s ease,visibility 0s .9s}
+  .slide.active{opacity:1;visibility:visible;transition:opacity .9s ease}
+  .slide.active .bg img{animation:kenburns 22s ease-out forwards}
+  @keyframes kenburns{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.14) translate(-1.5%,-1%)}}
+  .r{opacity:0;transform:translateY(14px)}
+  .slide.active .r{animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--d,0) * 1s + .25s)}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .slide.active .flick{animation:flicker 4.5s infinite;animation-delay:1.4s}
+  @keyframes flicker{0%,100%{opacity:1}3%{opacity:.35}4%{opacity:1}6%{opacity:.6}7%{opacity:1}52%{opacity:1}53%{opacity:.5}54%{opacity:1}}
+  .slide.active .rad .spin{animation:spin 60s linear infinite;transform-origin:100px 100px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .slide.active .rad-glow{animation:pulse 3.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{filter:drop-shadow(0 0 12px rgba(224,182,42,.25))}50%{filter:drop-shadow(0 0 34px rgba(224,182,42,.6))}}
+  .slide.active .route div:before{animation:blink 1.6s infinite}
+  .slide.active .route div:nth-child(2):before{animation-delay:.3s}
+  .slide.active .route div:nth-child(3):before{animation-delay:.6s}
+  .slide.active .route div:nth-child(4):before{animation-delay:.9s}
+  .slide.active .route div:nth-child(5):before{animation-delay:1.2s}
+  @keyframes blink{50%{opacity:.25;box-shadow:none}}
+  .slide.active .bar i{animation:fill 1.8s cubic-bezier(.2,.7,.2,1) both .8s}
+  @keyframes fill{from{width:0!important}}
+  .slide.active .hazard{animation:tape 12s linear infinite}
+  @keyframes tape{to{background-position:396px 0}}
+  #grain{position:fixed;inset:-50%;z-index:50;pointer-events:none;opacity:.09;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation:grain .5s steps(4) infinite}
+  @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}}
+  #dust{position:fixed;inset:0;z-index:40;pointer-events:none}
+  #hud{position:fixed;left:18px;bottom:14px;z-index:60;font:12px "PT Mono",monospace;color:var(--acc);background:rgba(0,0,0,.55);border:1px solid rgba(224,182,42,.35);padding:7px 11px;display:flex;gap:14px;align-items:center}
+  #hud .dot{transition:transform .06s;width:8px;height:8px;border-radius:50%;background:var(--tox);box-shadow:0 0 8px var(--tox)}
+  #hud.hot .dot{background:var(--red);box-shadow:0 0 10px var(--red)}
+  #hud.hot #dose{color:#ff8a70}
+  #hud .k{color:var(--muted)}
+  #prog{position:fixed;left:0;top:0;height:3px;background:var(--acc);z-index:60;transition:width .6s}
+  #help{position:fixed;right:18px;bottom:14px;z-index:60;font:11px "PT Mono",monospace;color:rgba(230,226,211,.45)}
+}
+/* ---------- print: static PDF ---------- */
+@media print{
+  #grain,#dust,#hud,#prog,#help{display:none!important}
+  .slide{page-break-after:always;break-after:page}
+  .slide:last-child{page-break-after:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- reusable worn radiation sign -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="wear" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="11" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -3.2 2.25" result="mask"/>
+      <feComposite in="SourceGraphic" in2="mask" operator="in" result="worn"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="4" result="w"/>
+      <feDisplacementMap in="worn" in2="w" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="rust" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="4" seed="7" result="t"/>
+      <feColorMatrix in="t" type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.22  0 0 0 0 0.06  0 0 0 -5 2.3" result="spots"/>
+      <feComposite in="spots" in2="SourceAlpha" operator="in"/>
+    </filter>
+    <radialGradient id="paint" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#f2c936"/><stop offset=".65" stop-color="#d9a624"/><stop offset="1" stop-color="#9a6a1a"/>
+    </radialGradient>
+    <radialGradient id="disc" cx="50%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#232520"/><stop offset="1" stop-color="#0b0c0a"/>
+    </radialGradient>
+    <g id="blades">
+      <path id="blade" d="M89 80.95 L61 32.45 A78 78 0 0 1 139 32.45 L111 80.95 A22 22 0 0 0 89 80.95 Z"/>
+      <use href="#blade" transform="rotate(120 100 100)"/>
+      <use href="#blade" transform="rotate(240 100 100)"/>
+      <circle cx="100" cy="100" r="14"/>
+    </g>
+    <symbol id="radsign" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="96" fill="url(#disc)"/>
+      <circle cx="100" cy="100" r="91" fill="none" stroke="url(#paint)" stroke-width="6" filter="url(#wear)"/>
+      <circle cx="100" cy="100" r="83" fill="none" stroke="#e0b62a" stroke-opacity=".35" stroke-width="1" stroke-dasharray="2 5"/>
+      <g class="spin">
+        <g transform="rotate(60 100 100)">
+          <g filter="url(#wear)"><use href="#blades" fill="url(#paint)"/></g>
+          <g filter="url(#rust)" opacity=".9"><use href="#blades" fill="#000"/></g>
+        </g>
+        <g stroke="#0b0c0a" stroke-width="1.3" opacity=".75">
+          <line x1="40" y1="70" x2="120" y2="55"/><line x1="70" y1="150" x2="160" y2="120"/>
+          <line x1="110" y1="40" x2="150" y2="95"/><line x1="55" y1="110" x2="85" y2="160"/>
+        </g>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div id="deck">
+
+<!-- 1. Титульный -->
+<section class="slide title">
+  <div class="bg"><img src="img/wheel2.jpg" alt=""></div>
+  <div class="vignette"></div>
+  <div class="hazard bot"></div>
+  <div class="credit">Фото: Hnapel, CC BY-SA 4.0</div>
+  <div class="content">
+    <h1 class="r" style="--d:.2">Земля<br>отчуждения</h1>
+    <p class="sub r" style="--d:.6">Анализ мультимедийного спецпроекта ИД «Коммерсантъ» (2014)<br>Вариант № 1: анализ готового проекта</p>
+    <p class="coords r" style="--d:.8">51°23′ с. ш. 30°06′ в. д. · kommersant.ru/projects/chernobyl</p>
+    <div class="author r" style="--d:1.1">
+      <b>Гашинская Дарья Андреевна</b><br>
+      Группа 5204 · 2 курс<br>
+      Самарский университет · факультет «Дизайн медиапроектов»
+    </div>
+    <div class="radwrap r" style="--d:.4"><svg class="rad rad-glow" width="380" height="380"><use href="#radsign"/></svg></div>
+  </div>
+  <div class="num">01</div>
+</section>
+
+<!-- 2. Бриф и проблема -->
+<section class="slide">
+  <div class="bg faint"><img src="img/zone23.jpg" alt=""></div>
+  <div class="vignette"></div>
+  <div class="content">
+    <div class="label r">02 / Бриф и проблема</div>
+    <h1 class="r" style="--d:.1">Репортаж-маршрут по зоне через 28 лет после аварии</h1>
+    <div class="grid" style="grid-template-columns:1.05fr 1fr;gap:28px">
+      <div>
+        <div class="r" style="--d:.25">
+          <h3>Идея проекта</h3>
+          <p>Скролл-лонгрид с параллаксом, выпущенный к годовщине аварии (26.04.2014, дополнен в 2016). Читатель «едет» по зоне от КПП к реактору и дальше, к самосёлам: каждая глава привязана к расстоянию от ЧАЭС.</p>
+          <p class="muted" style="font-size:13.5px;margin-top:6px;font-family:'PT Mono',monospace">≈34,5 тыс. знаков · 9 глав · 8 видео · 3 аудио (дозиметр, птицы) · ~170 фото · 3D-ролик · панорама · таймлайн · RU/EN</p>
+        </div>
+        <div class="route r" style="margin-top:16px;--d:.45">
+          <div><span>12 км</span>Чернобыль</div>
+          <div><span>0 км</span>Реактор, авария, ликвидация</div>
+          <div><span>3 км</span>Припять</div>
+          <div><span>···</span>Копачи, «Изумрудный», «Чернобыль-2»</div>
+          <div><span>32 км</span>Куповатое</div>
+        </div>
+        <div class="grid g2" style="margin-top:20px;gap:16px">
+          <div class="card r" style="--d:.65"><h3>Проблема пользователя</h3><p style="font-size:14.5px">О Чернобыле знают по мифам, играм (S.T.A.L.K.E.R.) и разрозненным фото. Нет одного места, где факты, хронология и «как там сейчас» собраны вместе и проверены.</p></div>
+          <div class="card r" style="--d:.8"><h3>Бизнес-цель издателя</h3><p style="font-size:14.5px">Имидж качественного медиа, трафик и время на странице к памятной дате, зарубежная аудитория через EN-версию, рекламный инвентарь.</p></div>
+        </div>
+      </div>
+      <div class="grid r" style="grid-template-rows:1.25fr 1fr;gap:14px;--d:.5">
+        <div class="shot">Скриншот 1<br>Обложка / первый экран спецпроекта</div>
+        <div class="grid g2" style="gap:14px">
+          <div class="shot">Скриншот 2<br>Таймлайн «Как развивалась авария»</div>
+          <div class="shot">Скриншот 3<br>Глава «Припять»</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="num">02</div>
+</section>
+
+<!-- 3. Конкуренты -->
+<section class="slide">
+  <div class="bg faint"><img src="img/duga.jpg" alt=""></div>
+  <div class="vignette"></div>
+  <div class="credit">Фото: РЛС «Дуга», Ingmar Runge, CC BY 3.0</div>
+  <div class="content">
+    <div class="label r">03 / Анализ рынка и конкурентов</div>
+    <h1 class="r" style="font-size:34px;margin-bottom:16px;--d:.1">Карта конкурентов: 3 прямых и 2 косвенных</h1>
+    <table class="r" style="--d:.3">
+      <tr><th style="width:11%">Параметр</th><th class="hl" style="width:17%">«Земля отчуждения», Коммерсантъ (2014)</th><th>PBS Frontline «Return to Chernobyl» (2016)</th><th>National Geographic, 360°-фото Припяти (2016)</th><th>RTVI «Чернобылю 40 лет: хронология по минутам» (2026)</th><th>Косвенный: документальные фильмы на Rutube</th><th>Косвенный: Telegram-каналы о ЧЗО и сталкерстве</th></tr>
+      <tr><td><b>Тип</b></td><td class="hl">Прямой (анализируемый)</td><td>Прямой</td><td>Прямой</td><td>Прямой</td><td>Косвенный</td><td>Косвенный</td></tr>
+      <tr><td><b>Продукт</b> (глубина, уникальность)</td><td class="hl">Репортаж + история + наука: 9 глав, интервью эксперта (Л. Большов), герои (баба Ганна). Очень глубоко</td><td>Видеорепортаж в 360°, англоязычный, акцент на «как сейчас»</td><td>Серия 360°-снимков с подписями, мало текста</td><td>Поминутная хроника аварии, справочный текст к юбилею</td><td>Архив и интервью ликвидаторов (напр. «Хроника трудных недель», 1986); долго, без навигации</td><td>Короткие посты, фото и видео из зоны, мнения; быстро, но непроверенно</td></tr>
+      <tr><td><b>Функционал</b> (поиск, интерактив)</td><td class="hl">Параллакс, видео, эмбиент-звук, таймлайн, 3D-ролик, панорама; поиска нет</td><td>Обзор 360° мышью или гироскопом</td><td>Панорамы 360°</td><td>Линейный скролл, фото</td><td>Плеер, таймкоды, комментарии</td><td>Лента, поиск по каналу, реакции</td></tr>
+      <tr><td><b>Дизайн</b> (UI/UX, стиль)</td><td class="hl">Полноэкранная фотография, тёмная палитра, атмосферный звук</td><td>Брендинг PBS, видео в центре</td><td>Фирменный стиль NatGeo, фото на первом плане</td><td>Новостной шаблон</td><td>Интерфейс платформы</td><td>Интерфейс мессенджера</td></tr>
+      <tr><td><b>Монетизация</b></td><td class="hl">Реклама на сайте, имидж бренда</td><td>Общественное финансирование, гранты</td><td>Реклама, подписка</td><td>Реклама</td><td>Реклама платформы</td><td>Рекламные посты, донаты</td></tr>
+    </table>
+    <div class="card r" style="margin-top:14px;padding:12px 18px;--d:.6"><p style="font-size:15px"><b>Вывод (УТП):</b> единственный русскоязычный проект, который соединяет маршрут по зоне «по километрам», проверенную хронологию, экспертное интервью и атмосферный звук в одном двуязычном издании от авторитетного делового медиа. Конкуренты дают либо картинку (360°), либо факты (хроника), либо скорость (Telegram).</p></div>
+  </div>
+  <div class="num">03</div>
+</section>
+
+<!-- 4. ЦА -->
+<section class="slide">
+  <div class="bg faint"><img src="img/pschool.jpg" alt=""></div>
+  <div class="vignette"></div>
+  <div class="credit">Фото: школа в Припяти, Shanomag, CC BY-SA 4.0</div>
+  <div class="content">
+    <div class="label r">04 / Анализ целевой аудитории</div>
+    <h1 class="r" style="font-size:36px;margin-bottom:18px;--d:.1">Три персоны и их «работа» для издания</h1>
+    <div class="grid g3" style="gap:18px">
+      <div class="card r" style="--d:.3">
+        <h3>Артём, 24, Москва</h3>
+        <p class="muted" style="font-size:15px;margin-bottom:8px">IT-специалист, фанат S.T.A.L.K.E.R. и сериала HBO</p>
+        <p style="font-size:15.5px"><b>Устройство:</b> смартфон вечером, в метро; десктоп дома<br><b>Медиа:</b> YouTube, Rutube, Telegram, DTF<br><b>Контекст:</b> «залип» после игры, хочет понять, как зона выглядит на самом деле</p>
+        <p style="font-size:15.5px;margin-top:8px;color:var(--acc)">JTBD: «за один вечер отделить реальную Зону от игровой»</p>
+      </div>
+      <div class="card r" style="--d:.45">
+        <h3>Ирина, 41, Самара</h3>
+        <p class="muted" style="font-size:15px;margin-bottom:8px">Учитель истории и ОБЖ</p>
+        <p style="font-size:15.5px"><b>Устройство:</b> ноутбук и проектор в классе<br><b>Медиа:</b> Коммерсантъ, ТАСС, Дзен, учительские паблики VK<br><b>Контекст:</b> готовит урок к 26 апреля, нужны проверенные цифры и видео</p>
+        <p style="font-size:15.5px;margin-top:8px;color:var(--acc)">JTBD: «собрать хронологию и показать классу видео за 30 минут подготовки»</p>
+      </div>
+      <div class="card r" style="--d:.6">
+        <h3>Сергей, 58, Брянск</h3>
+        <p class="muted" style="font-size:15px;margin-bottom:8px">Инженер-энергетик, сын ликвидатора</p>
+        <p style="font-size:15.5px"><b>Устройство:</b> планшет на диване<br><b>Медиа:</b> подписчик «Коммерсанта», ТВ-документалки<br><b>Контекст:</b> годовщина, хочет увидеть, что стало с местами, о которых рассказывал отец</p>
+        <p style="font-size:15.5px;margin-top:8px;color:var(--acc)">JTBD: «вспомнить и показать семье, как живёт зона сейчас»</p>
+      </div>
+    </div>
+    <div class="card r" style="margin-top:18px;padding:14px 20px;--d:.8">
+      <h3>Метод проверки гипотез</h3>
+      <p style="font-size:16px">Портреты гипотетические. Для проверки планируется: <b>5 глубинных интервью</b> (по 1–2 на персону), <b>онлайн-опрос 50 человек</b> в профильных пабликах (сообщества S.T.A.L.K.E.R., учительские, чернобыльские) и <b>анализ глубины скролла и тепловых карт</b>: на странице уже стоит Яндекс.Метрика (Вебвизор).</p>
+    </div>
+  </div>
+  <div class="num">04</div>
+</section>
+
+<!-- 5. ГОСТ -->
+<section class="slide">
+  <div class="bg faint"><img src="img/periodic.jpg" alt=""></div>
+  <div class="vignette"></div>
+  <div class="credit">Фото: школа «Чернобыля-2», Joël van der Loo, CC BY-SA 4.0</div>
+  <div class="content">
+    <div class="label r">05 / Классификация издания · ГОСТ Р 7.0.83-2013</div>
+    <h1 class="r" style="--d:.1">«Скелет»: что это за издание формально</h1>
+    <table class="r" style="--d:.3">
+      <tr><th style="width:30%;font-size:16px">Критерий</th><th style="width:28%;font-size:16px">Значение</th><th style="font-size:16px">Обоснование</th></tr>
+      <tr><td style="font-size:15.5px"><b>По целевому назначению</b></td><td style="font-size:15.5px">Общественно-политическое / научно-популярное (документальное)</td><td style="font-size:15px">Журналистский репортаж и популярное объяснение физики аварии и её последствий для широкой аудитории</td></tr>
+      <tr><td style="font-size:15.5px"><b>По природе основной информации</b></td><td style="font-size:15.5px">Мультимедийное</td><td style="font-size:15px">Текст, фото, видео, аудио, 3D-ролик и панорама равноправны и не заменяют друг друга</td></tr>
+      <tr><td style="font-size:15.5px"><b>По технологии распространения</b></td><td style="font-size:15.5px">Сетевое</td><td style="font-size:15px">Доступно только онлайн на kommersant.ru, медиа подгружается с сервера</td></tr>
+      <tr><td style="font-size:15.5px"><b>По характеру взаимодействия</b></td><td style="font-size:15.5px">Интерактивное (с детерминированным сценарием)</td><td style="font-size:15px">Пользователь управляет скроллом, запуском видео и звука, панорамой, но порядок глав задан автором</td></tr>
+      <tr><td style="font-size:15.5px"><b>По периодичности</b></td><td style="font-size:15.5px">Непериодическое (с разовым обновлением)</td><td style="font-size:15px">Выпущено один раз в 2014 году, в 2016-м добавлен блок о строительстве нового саркофага</td></tr>
+    </table>
+  </div>
+  <div class="num">05</div>
+</section>
+
+<!-- 6. Типология -->
+<section class="slide">
+  <div class="bg right"><img src="img/kopachi.jpg" alt=""></div>
+  <div class="vignette"></div>
+  <div class="credit">Фото: детский сад в Копачах, Jorge Franganillo, CC BY 2.0</div>
+  <div class="content" style="width:80%">
+    <div class="label r">06 / Типология издания · смысловая модель</div>
+    <h1 class="r" style="--d:.1">«Душа»: зачем это издание человеку</h1>
+    <div class="grid g2" style="gap:22px">
+      <div class="card r" style="--d:.3">
+        <h3>Нарративно-иммерсивный · доминирующий</h3>
+        <div class="bar"><i style="width:70%"></i></div>
+        <ul style="font-size:15px">
+          <li>сюжет-маршрут: читатель «въезжает» через КПП «Дитятки» и движется по километрам</li>
+          <li>герои с именами: повар Дима, баба Ганна, самосёлы</li>
+          <li>щелчки дозиметра, пение птиц, полноэкранные фото, параллакс</li>
+        </ul>
+      </div>
+      <div class="card r" style="--d:.45">
+        <h3>Информационно-справочный · поддерживающий</h3>
+        <div class="bar"><i style="width:30%;background:#8a9a7a"></i></div>
+        <ul style="font-size:15px">
+          <li>поминутная хронология аварии 25–27 апреля 1986 года</li>
+          <li>цифры: площади зон, дозы, число ликвидаторов, стоимость саркофагов</li>
+          <li>историческая справка о городе и РЛС «Дуга»</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card r" style="margin-top:20px;--d:.65">
+      <h3>Обоснование</h3>
+      <p style="font-size:16px">Тема катастрофы перегружена цифрами и мифами, и сухая справка не даёт её «прожить». Ставка сделана на <b>эффект присутствия</b>: ощущение поездки и встречи с людьми. Справочный слой встроен в нарратив, чтобы погружение опиралось на проверенные факты, а не только на эмоцию. Утилитарно-практического типа нет: товара или инструмента проект не предлагает.</p>
+    </div>
+  </div>
+  <div class="num">06</div>
+</section>
+
+<!-- 7. Назначение -->
+<section class="slide">
+  <div class="bg faint"><img src="img/panorama.jpg" alt="" style="object-position:center 70%"></div>
+  <div class="vignette"></div>
+  <div class="credit">Фото: Припять, Matti Paavonen, CC BY-SA 3.0</div>
+  <div class="content">
+    <div class="label r">07 / Назначение для пользователя и для издателя</div>
+    <h1 class="r" style="--d:.1">Матрица ценностей</h1>
+    <div class="grid g2" style="gap:28px">
+      <div class="card r" style="--d:.3">
+        <h3>Для пользователя</h3>
+        <p style="margin-bottom:12px"><span class="tag on">Информирование · доминирующая</span><span class="tag">Вдохновение / сопереживание</span><span class="tag">Развлечение · нет</span></p>
+        <p>Понять, что произошло в 1986 году и что такое зона сегодня, увидеть её «своими глазами». Сопереживание здесь вторичная ценность: оно удерживает внимание на длинном тексте.</p>
+      </div>
+      <div class="card r" style="--d:.45">
+        <h3>Для издателя</h3>
+        <p style="margin-bottom:12px"><span class="tag on">Продвижение бренда · доминирующая</span><span class="tag">Удержание аудитории</span><span class="tag">Доход (реклама)</span><span class="tag">Сбор данных (Метрика)</span></p>
+        <p>Показать, что «Коммерсантъ» умеет не только деловые новости, но и сильную документальную журналистику. Долгое время на странице и EN-версия работают на имидж и охват.</p>
+      </div>
+    </div>
+    <div class="card r" style="margin-top:24px;--d:.7">
+      <p class="big">Для пользователя – достоверное знание через эффект присутствия. Для издателя – продвижение бренда и удержание аудитории к памятной дате.</p>
+    </div>
+  </div>
+  <div class="num">07</div>
+</section>
+
+<!-- 8. Концепция -->
+<section class="slide" data-hot="1">
+  <div class="bg reactor"><img src="img/reactor.jpg" alt=""></div>
+  <div class="vignette"></div>
+  <div class="credit">Фото: 4-й энергоблок и саркофаг, Clay Gilliland, CC BY-SA 2.0</div>
+  <div class="content">
+    <div class="label r">08 / Концепция проекта</div>
+    <h1 class="r" style="margin-bottom:20px;--d:.1">«Проехать зону, не выезжая из дома»</h1>
+    <div class="grid g3" style="gap:16px;width:88%">
+      <div class="card r" style="--d:.3"><h3>Ключевая идея</h3><p style="font-size:15px">Документальное путешествие по Чернобыльской зоне, где каждое место становится главой, а расстояние до реактора служит навигацией.</p></div>
+      <div class="card r" style="--d:.4"><h3>Проблема → решение</h3><p style="font-size:15px">Мифы и разрозненные факты → один проверенный нарратив, где хронология, наука и живые люди связаны маршрутом.</p></div>
+      <div class="card r" style="--d:.5"><h3>Целевая аудитория</h3><p style="font-size:15px">Взрослые 20–60 лет, интересующиеся историей и наукой: «сталкеры по интересу», педагоги, люди с личной связью с Чернобылем.</p></div>
+      <div class="card r" style="--d:.6"><h3>УТП</h3><p style="font-size:15px">Глубина деловой журналистики, атмосфера мультимедиа и двуязычность. У конкурентов есть либо 360°-картинка, либо хроника, либо скорость.</p></div>
+      <div class="card r" style="--d:.7"><h3>Формат и функции</h3><p style="font-size:15px">Адаптивный веб-лонгрид с параллакс-прокруткой, видео, эмбиент-аудио, таймлайном, 3D-роликом и панорамой.</p></div>
+      <div class="card r" style="--d:.8"><h3>Стиль и тон голоса</h3><p style="font-size:15px">Тёмная приглушённая палитра, крупная фотография. Тон сдержанный и документальный, без сенсационности.</p></div>
+    </div>
+  </div>
+  <div class="num">08</div>
+</section>
+
+<!-- 9. Формат -->
+<section class="slide">
+  <div class="bg faint"><img src="img/school.jpg" alt=""></div>
+  <div class="vignette"></div>
+  <div class="credit">Фото: Adam Jones, CC BY-SA 2.0</div>
+  <div class="content">
+    <div class="label r">09 / Выбор формата файла и обоснование</div>
+    <h1 class="r" style="font-size:36px;margin-bottom:18px;--d:.1">Адаптивный HTML соответствует целям проекта</h1>
+    <table class="r" style="--d:.3">
+      <tr><th style="width:17%;font-size:15px;padding:10px 14px">Формат</th><th style="width:12%;font-size:15px;padding:10px 14px">Оценка</th><th style="font-size:15px;padding:10px 14px">Почему</th></tr>
+      <tr><td class="hl" style="font-size:15.5px;padding:11px 14px"><b>Адаптивный HTML-сайт</b></td><td class="hl" style="font-size:15.5px;padding:11px 14px;color:var(--acc)"><b>Подходит</b></td><td class="hl" style="font-size:15.5px;padding:11px 14px">Сетевое мультимедийное интерактивное издание (слайд 5): видео, звук и параллакс работают в браузере без установки. Открывается по ссылке из соцсетей и новостей, что нужно для разового пика трафика к годовщине. Индексируется поиском, есть RU/EN.</td></tr>
+      <tr><td style="font-size:15.5px;padding:11px 14px"><b>Статичный PDF / PDF с оглавлением</b></td><td style="font-size:15.5px;padding:11px 14px;color:var(--red)">Не подходит</td><td style="font-size:15.5px;padding:11px 14px">Теряются видео, эмбиент-звук дозиметра и параллакс, а вместе с ними иммерсивность, ядро типа. Неудобен на смартфоне, не индексируется как статья, не несёт рекламу сайта.</td></tr>
+      <tr><td style="font-size:15.5px;padding:11px 14px"><b>EPUB</b></td><td style="font-size:15.5px;padding:11px 14px;color:var(--red)">Не подходит</td><td style="font-size:15.5px;padding:11px 14px">Читалки слабо поддерживают видео и аудио, вёрстка «плывёт». Это формат книги, а не разового репортажа к дате.</td></tr>
+      <tr><td style="font-size:15.5px;padding:11px 14px"><b>PWA</b></td><td style="font-size:15.5px;padding:11px 14px;color:var(--muted)">Избыточно</td><td style="font-size:15.5px;padding:11px 14px">Офлайн-режим и установка на экран нужны для регулярного использования, а издание непериодическое и читается один раз.</td></tr>
+    </table>
+    <div class="card r" style="margin-top:14px;padding:12px 18px;--d:.6">
+      <p style="font-size:15px"><b>Слабое место реализации:</b> панорама зала управления 4-го блока сделана на Flash (.swf). После отключения Flash в 2020 году она не открывается, то есть часть интерактива уже потеряна. Тяжёлый параллакс на jQuery и ~170 фото нагружают мобильные устройства.</p>
+    </div>
+  </div>
+  <div class="num">09</div>
+</section>
+
+<!-- 10. Заключение -->
+<section class="slide" data-hot="1">
+  <div class="bg faint"><img src="img/plant.jpg" alt=""></div>
+  <div class="vignette"></div>
+  <div class="hazard top"></div>
+  <div class="credit" style="top:26px">Фото: ЧАЭС, Tiia Monto, CC BY-SA 3.0</div>
+  <div class="content">
+    <div class="label r">10 / Заключение</div>
+    <h1 class="r" style="--d:.1">Три главных риска на этапе реализации</h1>
+    <div class="grid g3" style="gap:20px">
+      <div class="card risk r" style="--d:.3">
+        <h3>01 · Производство в зоне</h3>
+        <p style="font-size:15.5px">Пропуска по заранее поданным спискам, сопровождение, радиационные ограничения на время съёмки. Срыв поездки ломает весь маршрут-нарратив: контент собирается только «в поле», и заменить его нечем.</p>
+      </div>
+      <div class="card risk r" style="--d:.45">
+        <h3>02 · Устаревание и вес</h3>
+        <p style="font-size:15.5px">Flash-панорама уже не работает. 8 видео, звук и параллакс медленно грузятся по мобильному интернету, а автозвук блокируется браузерами. Нужны HTML5/WebGL и лёгкая мобильная версия.</p>
+      </div>
+      <div class="card risk r" style="--d:.6">
+        <h3>03 · Достоверность</h3>
+        <p style="font-size:15.5px">Данные о жертвах спорны (от 9 тыс. до 530 тыс.), политический контекст 2014 года чувствителен, цифры по саркофагу устаревают: в 2016 году текст уже пришлось дополнять. Нужны ссылки на источники и план обновлений.</p>
+      </div>
+    </div>
+    <div class="card r" style="margin-top:22px;--d:.85">
+      <p style="font-size:16.5px"><b>Итог:</b> назначение издания (знание через эффект присутствия) задаёт его структуру: маршрут по километрам вместо рубрик, мультимедиа вместо иллюстраций и HTML вместо документа. Классификация и типология согласованы. Главный урок проекта: технологии мультимедиа стареют быстрее контента.</p>
+    </div>
+  </div>
+  <div class="num">10</div>
+</section>
+
+<!-- 11. Источники -->
+<section class="slide">
+  <div class="bg right"><img src="img/wheel.jpg" alt=""></div>
+  <div class="vignette"></div>
+  <div class="content" style="width:66%">
+    <div class="label r">11 / Источники</div>
+    <h1 class="r" style="--d:.1">Использованные материалы</h1>
+    <ul class="r" style="font-size:15px;line-height:1.55;--d:.3">
+      <li style="font-size:15px">«Земля отчуждения». Спецпроект ИД «Коммерсантъ», 2014 – kommersant.ru/projects/chernobyl</li>
+      <li style="font-size:15px">PBS Frontline. Return to Chernobyl, 2016 – pbs.org/wgbh/frontline</li>
+      <li style="font-size:15px">National Geographic. Experience Chernobyl's Haunting Ruins in 360-Degree Photos, 2016</li>
+      <li style="font-size:15px">RTVI. Чернобылю 40 лет: хронология катастрофы по минутам, 2026</li>
+      <li style="font-size:15px">«Чернобыль. Хроника трудных недель», реж. В. Шевченко, 1986</li>
+      <li style="font-size:15px">ГОСТ Р 7.0.83-2013. Электронные издания. Основные виды и выходные сведения</li>
+      <li style="font-size:15px">Учебное пособие, раздел 1 «Введение в электронные издания…»</li>
+    </ul>
+    <p class="muted r" style="margin-top:14px;font:11.5px/1.5 'PT Mono',monospace;--d:.5">Фотографии: Wikimedia Commons – Hnapel, Shanomag (CC BY-SA 4.0); Alexander Blecher (CC BY-SA 4.0); Ingmar Runge (CC BY 3.0); Joël van der Loo (CC BY-SA 4.0); Jorge Franganillo (CC BY 2.0); Matti Paavonen, Tiia Monto (CC BY-SA 3.0); Clay Gilliland, Adam Jones (CC BY-SA 2.0).<br>Персоны на слайде 4 – гипотезы, требующие проверки интервью и опросом.</p>
+  </div>
+  <div class="credit">Фото: Shanomag, CC BY-SA 4.0</div>
+  <div class="num">11</div>
+</section>
+
+</div>
+
+<div id="grain"></div>
+<canvas id="dust"></canvas>
+<div id="prog"></div>
+<div id="hud"><span class="dot"></span><span class="k">ДП-5</span><span id="dose">0.14 мкЗв/ч</span><span class="k" id="snd">звук: выкл [S]</span></div>
+<div id="help">← → пробел · F полный экран</div>
+
+<script src="assets/geiger.js"></script>
+<script>
+(function(){
+  if (matchMedia('print').matches) return;
+  const slides=[...document.querySelectorAll('.slide')];
+  const deck=document.getElementById('deck');
+  let cur=0;
+  function fit(){const s=Math.min(innerWidth/1280,innerHeight/720);deck.style.setProperty('--s',s);}
+  addEventListener('resize',fit);fit();
+  function show(i){
+    cur=Math.max(0,Math.min(slides.length-1,i));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===cur));
+    document.getElementById('prog').style.width=((cur+1)/slides.length*100)+'%';
+    hot=!!slides[cur].dataset.hot;if(window.Geiger)Geiger.setRate(hot?28:2.2);
+    document.getElementById('hud').classList.toggle('hot',hot);
+    try{history.replaceState(null,'','#'+(cur+1));}catch(e){}
+  }
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(cur+1);}
+    else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(cur-1);}
+    else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
+    else if(e.key==='f'||e.key==='F'||e.key==='а'||e.key==='А'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{});}
+    else if(e.key==='s'||e.key==='S'||e.key==='ы'||e.key==='Ы'){toggleSound();}
+  });
+  addEventListener('click',e=>{show(e.clientX>innerWidth*0.3?cur+1:cur-1);});
+
+  /* dosimeter + Geiger */
+  let hot=false; const dose=document.getElementById('dose');
+  function toggleSound(){const on=Geiger.toggle();document.getElementById('snd').textContent='звук: '+(on?'вкл':'выкл')+' [S]';}
+  Geiger.onClick(()=>{const d=document.querySelector('#hud .dot');d.style.transform='scale(1.8)';setTimeout(()=>d.style.transform='',60);});
+  setInterval(()=>{const v=hot?(2.8+Math.random()*3.4):(0.11+Math.random()*0.12);dose.textContent=v.toFixed(2)+' мкЗв/ч';Geiger.setRate(hot?28:2.2);},400);
+  /* floating dust */
+  const cv=document.getElementById('dust'),c=cv.getContext('2d');let P=[];
+  function rs(){cv.width=innerWidth;cv.height=innerHeight;P=Array.from({length:70},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.8+.3,vx:(Math.random()-.5)*.25,vy:-Math.random()*.3-.05,a:Math.random()*.5+.15,t:Math.random()*6}));}
+  addEventListener('resize',rs);rs();
+  (function loop(){c.clearRect(0,0,cv.width,cv.height);
+    for(const p of P){p.x+=p.vx+Math.sin(p.t+=.01)*.15;p.y+=p.vy;if(p.y<-5){p.y=cv.height+5;p.x=Math.random()*cv.width;}
+      c.beginPath();c.arc(p.x,p.y,p.r,0,7);c.fillStyle=`rgba(232,214,150,${p.a*(hot?1.3:1)})`;c.fill();}
+    requestAnimationFrame(loop);})();
+
+  const start=parseInt(location.hash.slice(1))||1; show(start-1);
+})();
+</script>
+</body>
+</html>
