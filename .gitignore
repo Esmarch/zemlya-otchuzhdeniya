@@ -4,3 +4,5 @@ assets/local/*
 !assets/local/README.txt
 *.url
 Ссылки на проект.txt
+*.pptx
+ПР1_*.pdf
