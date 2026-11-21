@@ -482,11 +482,13 @@ td.hl,th.hl{background:rgba(224,182,42,.09)}
 <div id="grain"></div>
 <canvas id="dust"></canvas>
 <div id="prog"></div>
-<div id="hud"><span class="dot"></span><span class="k">ДП-5</span><span id="dose">0.14 мкЗв/ч</span><span class="k" id="snd">звук: выкл [S]</span></div>
-<div id="help">← → пробел · F полный экран</div>
+<div id="hud"><span class="dot"></span><span class="k">ДП-5</span><span id="dose">0.14 мкЗв/ч</span><span class="k" id="snd">звук: выкл [S]</span><span class="k" id="mus">музыка: выкл [M]</span></div>
+<div id="help">← → пробел · F полный экран · M музыка</div>
 
 <script src="assets/geiger.js?v=4"></script>
 <script src="assets/tables.js?v=4"></script>
+<script src="assets/ambient.js?v=5"></script>
+<script src="assets/music.js?v=5"></script>
 <script>
 (function(){
   if (matchMedia('print').matches) return;
@@ -509,6 +511,7 @@ td.hl,th.hl{background:rgba(224,182,42,.09)}
     else if(e.key==='Home')show(0); else if(e.key==='End')show(slides.length-1);
     else if(e.key==='f'||e.key==='F'||e.key==='а'||e.key==='А'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{});}
     else if(e.key==='s'||e.key==='S'||e.key==='ы'||e.key==='Ы'){toggleSound();}
+    else if(e.key==='m'||e.key==='M'||e.key==='ь'||e.key==='Ь'){Music.toggle().then(on=>{document.getElementById('mus').textContent='музыка: '+(on?'вкл':'выкл')+' [M]';});}
   });
   addEventListener('click',e=>{show(e.clientX>innerWidth*0.3?cur+1:cur-1);});
 

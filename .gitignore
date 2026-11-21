@@ -1,2 +1,4 @@
 .claude/
 ПР1_*.pdf
+assets/local/*
+!assets/local/README.txt

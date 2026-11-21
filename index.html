@@ -393,10 +393,12 @@ footer p{margin-bottom:8px}
 
 <div id="grain"></div>
 <canvas id="dust"></canvas>
-<div id="hud"><span class="dot"></span><span class="mono" style="color:var(--muted)">ДП-5</span><span id="dose">0.14 мкЗв/ч</span><button id="snd" type="button">♪ звук</button></div>
+<div id="hud"><span class="dot"></span><span class="mono" style="color:var(--muted)">ДП-5</span><span id="dose">0.14 мкЗв/ч</span><button id="snd" type="button">♪ звук</button><button id="mus" type="button">♫ музыка</button></div>
 
 <script src="assets/geiger.js?v=4"></script>
 <script src="assets/tables.js?v=4"></script>
+<script src="assets/ambient.js?v=5"></script>
+<script src="assets/music.js?v=5"></script>
 <script>
 (function(){
   /* scroll reveal */
@@ -421,6 +423,7 @@ footer p{margin-bottom:8px}
 
   /* dosimeter */
   setInterval(()=>{const v=hot?(2.8+Math.random()*3.4):(0.11+Math.random()*0.12);dose.textContent=v.toFixed(2)+' мкЗв/ч';},400);
+  document.getElementById('mus').addEventListener('click',e=>{Music.toggle().then(on=>{e.target.textContent=on?'♫ выкл':'♫ музыка';});});
   document.getElementById('snd').addEventListener('click',e=>{const on=Geiger.toggle();e.target.textContent=on?'♪ выкл':'♪ звук';});
   Geiger.onClick(()=>{const d=hud.querySelector('.dot');d.style.transform='scale(1.8)';setTimeout(()=>d.style.transform='',60);});
 
