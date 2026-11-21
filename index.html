@@ -68,6 +68,11 @@ nav .links a:hover,nav .links a.on{color:var(--acc)}
 .scroll{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font:12px "PT Mono",monospace;color:var(--muted);animation:bob 2s infinite}
 @keyframes bob{50%{transform:translate(-50%,6px)}}
 
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:20px}
+.shots figure{position:relative;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/10}
+.shots img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .8s}
+.shots figure:hover img{transform:scale(1.07)}
+.shots figcaption{position:absolute;left:0;right:0;bottom:0;padding:6px 10px;font:12px "PT Mono",monospace;background:linear-gradient(transparent,rgba(0,0,0,.85))}
 /* route */
 .track{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:30px}
 .stop{border-top:2px dashed var(--acc);padding:18px 14px 0 0;position:relative}
@@ -135,6 +140,7 @@ footer p{margin-bottom:8px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
+<link rel="stylesheet" href="assets/tables.css">
 </head>
 <body>
 
@@ -194,7 +200,7 @@ footer p{margin-bottom:8px}
   <div class="photo-bg"><img src="img/wheel2.jpg" alt="Колесо обозрения в Припяти"></div>
   <div class="wrap">
     <div>
-      <div class="label">Справочник · практическая работа № 1</div>
+      <div class="label">Справочник</div>
       <h1>Земля<br>отчуждения</h1>
       <p class="sub">Мини-справочник по мультимедийному спецпроекту ИД «Коммерсантъ» (2014): маршрут по Чернобыльской зоне, хронология аварии, анализ аудитории, классификация и глоссарий.</p>
       <div class="btns">
@@ -224,6 +230,12 @@ footer p{margin-bottom:8px}
       <div class="card rv"><h3>Идея</h3><p>Скролл-лонгрид с параллаксом, выпущенный к годовщине аварии 26 апреля 2014 года и дополненный в 2016-м. Читатель «едет» по зоне от КПП «Дитятки» к реактору и дальше, к самосёлам: каждая глава привязана к расстоянию от ЧАЭС.</p></div>
       <div class="card rv"><h3>Проблема читателя</h3><p>О Чернобыле знают по мифам, играм серии S.T.A.L.K.E.R. и разрозненным фото. Нет одного места, где факты, хронология и «как там сейчас» собраны вместе и проверены.</p></div>
       <div class="card rv"><h3>Цель издателя</h3><p>Имидж качественного медиа, трафик и время на странице к памятной дате, выход на зарубежную аудиторию через английскую версию и рекламный инвентарь.</p></div>
+    </div>
+    <div class="shots rv">
+      <figure><img src="img/shot1.jpg" alt="Обложка спецпроекта" loading="lazy"><figcaption>Обложка</figcaption></figure>
+      <figure><img src="img/shot2.jpg" alt="Таймлайн аварии" loading="lazy"><figcaption>Таймлайн аварии</figcaption></figure>
+      <figure><img src="img/shot3.jpg" alt="Глава Припять" loading="lazy"><figcaption>Припять, 3 км</figcaption></figure>
+      <figure><img src="img/shot4.jpg" alt="Глава Куповатое" loading="lazy"><figcaption>Куповатое, 32 км</figcaption></figure>
     </div>
     <div class="card rv" style="margin-top:20px"><h3>Медиа в проекте</h3><p class="mono" style="font-size:14.5px;text-align:left">≈34,5 тыс. знаков · 9 глав · 8 видео · 3 аудиодорожки (дозиметр, птицы) · ~170 фото · 3D-ролик нового конфайнмента · панорама зала управления (Flash) · поминутный таймлайн аварии · интервью Л. Большова (ИБРАЭ РАН)</p></div>
   </div>
@@ -314,7 +326,7 @@ footer p{margin-bottom:8px}
     <h2 class="rv">Конкуренты</h2>
     <div class="tbl rv">
       <table>
-        <tr><th>Параметр</th><th class="hl">«Земля отчуждения»</th><th>PBS Frontline, 2016</th><th>National Geographic 360°, 2016</th><th>RTVI, 2026</th><th>Rutube-документалки</th><th>Telegram-каналы</th></tr>
+        <tr><th data-kind="main">Параметр</th><th data-kind="main" class="hl">«Земля отчуждения»</th><th data-kind="direct">PBS Frontline, 2016</th><th data-kind="direct">National Geographic 360°, 2016</th><th data-kind="direct">RTVI, 2026</th><th data-kind="indirect">Rutube-документалки</th><th data-kind="indirect">Telegram-каналы</th></tr>
         <tr><td><b>Тип</b></td><td class="hl">Анализируемый</td><td>Прямой</td><td>Прямой</td><td>Прямой</td><td>Косвенный</td><td>Косвенный</td></tr>
         <tr><td><b>Продукт</b></td><td class="hl">Репортаж, история и наука, эксперт, герои</td><td>360°-видеорепортаж</td><td>360°-фото с подписями</td><td>Поминутная хроника</td><td>Архив, интервью ликвидаторов</td><td>Короткие посты, мнения</td></tr>
         <tr><td><b>Функционал</b></td><td class="hl">Параллакс, видео, звук, таймлайн, 3D</td><td>Обзор 360°</td><td>Панорамы 360°</td><td>Линейный скролл</td><td>Плеер, таймкоды</td><td>Лента, реакции</td></tr>
@@ -384,6 +396,7 @@ footer p{margin-bottom:8px}
 <div id="hud"><span class="dot"></span><span class="mono" style="color:var(--muted)">ДП-5</span><span id="dose">0.14 мкЗв/ч</span><button id="snd" type="button">♪ звук</button></div>
 
 <script src="assets/geiger.js"></script>
+<script src="assets/tables.js"></script>
 <script>
 (function(){
   /* scroll reveal */
