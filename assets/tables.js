@@ -17,30 +17,20 @@
       if (table.style.cssText) { wrap.style.cssText = table.style.cssText; table.style.cssText = ''; }
     } else wrap.classList.add('tblwrap');
 
-    const clear = () => table.querySelectorAll('.row-hot,.col-hot,.cell-hot').forEach(e => e.classList.remove('row-hot', 'col-hot', 'cell-hot'));
+    // жёлтым загорается только ячейка под курсором
+    const clear = () => table.querySelectorAll('.cell-hot').forEach(e => e.classList.remove('cell-hot'));
     table.addEventListener('mouseover', e => {
-      const c = e.target.closest('td,th'); if (!c) return;
-      clear();
-      const col = c.dataset.col;
-      c.parentElement.classList.add('row-hot');
-      table.querySelectorAll(`[data-col="${col}"]`).forEach(x => x.classList.add('col-hot'));
-      if (c.tagName === 'TD') c.classList.add('cell-hot');
+      const c = e.target.closest('td'); clear(); if (c) c.classList.add('cell-hot');
     });
     table.addEventListener('mouseleave', clear);
-    table.addEventListener('click', e => {
-      e.stopPropagation();                      // в презентации клик не листает слайд
-      const tr = e.target.closest('tr'); if (!tr || tr.rowIndex === 0) return;
-      tr.classList.toggle('pinned');
-      [...tr.cells].forEach(c => { c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); });
-    });
+    table.addEventListener('click', e => e.stopPropagation());   // в презентации клик по таблице не листает слайд
 
     // фильтр по типу конкурента (по data-kind у заголовков)
     const kinds = [...rows[0].cells].map(c => c.dataset.kind || '');
     if (kinds.some(k => k === 'direct')) {
       const bar = document.createElement('div'); bar.className = 'tfilter';
       const opts = [['all', 'Все'], ['direct', 'Прямые'], ['indirect', 'Косвенные']];
-      bar.innerHTML = opts.map(([v, t], i) => `<button type="button" data-v="${v}" class="${i ? '' : 'on'}">${t}</button>`).join('') +
-        '<span class="hint">наведите на ячейку · клик закрепляет строку</span>';
+      bar.innerHTML = opts.map(([v, t], i) => `<button type="button" data-v="${v}" class="${i ? '' : 'on'}">${t}</button>`).join('');
       wrap.parentNode.insertBefore(bar, wrap);
       if (wrap.classList.contains('r')) { bar.classList.add('r'); bar.style.setProperty('--d', wrap.style.getPropertyValue('--d') || '.2'); }
       bar.addEventListener('click', e => {

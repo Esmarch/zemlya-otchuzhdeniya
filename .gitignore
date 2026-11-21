@@ -2,3 +2,5 @@
 ПР1_*.pdf
 assets/local/*
 !assets/local/README.txt
+*.url
+Ссылки на проект.txt
